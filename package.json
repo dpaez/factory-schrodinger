@@ -1,0 +1,14 @@
+{
+  "name": "factory-schrodinger",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 4321 --open",
+    "build": "vite build",
+    "preview": "vite preview --port 4321"
+  },
+  "dependencies": {
+    "reveal.js": "^6.0.2",
+    "vite": "^8.3.5"
+  }
+}
