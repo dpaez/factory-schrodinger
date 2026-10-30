@@ -4,6 +4,37 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>La fábrica de Schrödinger</title>
+<style>
+  html, body { margin: 0; background: #0b0b0b; }
+  .reveal { opacity: 0; }
+  textarea[data-template] { display: none !important; }
+  #lang {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 40;
+    display: flex;
+    margin: 0;
+    font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    font-size: 13px;
+    letter-spacing: .08em;
+    background: #fafaf7;
+    border: 1px solid #d6d6d0;
+  }
+  #lang button {
+    font: inherit;
+    color: #6d6d68;
+    background: transparent;
+    border: 0;
+    margin: 0;
+    padding: 7px 11px;
+    cursor: pointer;
+    appearance: none;
+  }
+  #lang button + button { border-left: 1px solid #d6d6d0; }
+  #lang button[aria-pressed="true"] { color: #fafaf7; background: #0b0b0b; }
+</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -39,6 +70,21 @@
   </div>
 </div>
 <div id="toast"></div>
+<div id="lang" role="group" aria-label="Idioma">
+  <button type="button" data-lang="es" aria-pressed="true">ES</button>
+  <button type="button" data-lang="en" aria-pressed="false">EN</button>
+</div>
+<script>
+  (function () {
+    var q = new URLSearchParams(location.search).get('lang');
+    var saved = null;
+    try { saved = localStorage.getItem('lang'); } catch (e) {}
+    var lang = q === 'es' || q === 'en' ? q : (saved === 'es' || saved === 'en' ? saved : 'es');
+    document.querySelectorAll('#lang button').forEach(function (btn) {
+      btn.setAttribute('aria-pressed', String(btn.getAttribute('data-lang') === lang));
+    });
+  })();
+</script>
 
 <script type="module" src="/main.js"></script>
 </body>

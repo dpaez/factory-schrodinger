@@ -3,6 +3,7 @@
 // mount(root, slide) puede devolver { enter, leave, update(step) }.
 import { CATS } from './cats.js';
 import trendCsv from './time_series_Worldwide_20251022-1450_20261022-1450.csv?raw';
+import { numberLocale, t } from './i18n.js';
 
 const ARROW = '<svg viewBox="0 0 60 20"><use href="#arrow"/></svg>';
 const ket = (s) => `|${s}⟩`;
@@ -34,18 +35,18 @@ const C = {};
   /* ---------- caja del título ---------- */
   C['title-box'] = () => ({
     html: `<div class="c-titlebox">
-      <div class="box-wrap" title="Observar">
+      <div class="box-wrap" title="${t('titleObserve')}">
         <svg viewBox="0 0 620 560">
           <g class="popcat"><g class="hostcat" transform="translate(160 120) scale(1.5)"></g></g>
           <rect class="ln" x="110" y="270" width="400" height="260"/>
           <line class="hl" x1="110" y1="318" x2="510" y2="318"/>
-          <text x="310" y="300" text-anchor="middle" class="stencil">CAJA · NO ABRIR</text>
+          <text x="310" y="300" text-anchor="middle" class="stencil">${t('boxStencil')}</text>
           <text x="310" y="462" text-anchor="middle" class="psi">ψ</text>
           <g class="lid"><rect class="ln" x="96" y="242" width="428" height="30"/></g>
         </svg>
       </div>
-      <div class="box-state eq">${ket('ψ')} = ${ket('vivo')} + ${ket('muerto')}</div>
-      <div class="box-hint">[ click para observar ]</div>
+      <div class="box-state eq">${ket('ψ')} = ${ket(t('alive'))} + ${ket(t('dead'))}</div>
+      <div class="box-hint">${t('boxHint')}</div>
     </div>`,
     mount(root) {
       const box = root.querySelector('.box-wrap'), cat = root.querySelector('.hostcat'), st = root.querySelector('.box-state');
@@ -58,7 +59,7 @@ const C = {};
         } else {
           const alive = CATS.collapse(cat);
           box.classList.add('open');
-          st.innerHTML = alive ? `${ket('vivo')} · tests passing` : `${ket('muerto')} · tests failing`;
+          st.innerHTML = alive ? `${ket(t('alive'))} · tests passing` : `${ket(t('dead'))} · tests failing`;
         }
       });
     }
@@ -78,11 +79,11 @@ const C = {};
         <rect class="lf" x="520" y="285" width="56" height="30" transform="rotate(45 548 300)"/>
         <path class="hatch" d="M 590 350 v 40 l -34 76 q -6 18 12 18 h 88 q 18 0 12 -18 l -34 -76 v -40 z" style="color:var(--mid)"/>
         <g class="hostcat" transform="translate(110 300) scale(1.25)"></g>
-        <polyline class="leader" points="140,166 140,214"/><text x="80" y="240">(a) partícula</text>
-        <polyline class="leader" points="325,115 325,78 355,78"/><text x="361" y="84">(b) geiger</text>
-        <polyline class="leader" points="470,226 640,226"/><text x="646" y="232">(c) martillo</text>
-        <polyline class="leader" points="680,440 740,440 740,520"/><text x="604" y="545">(d) veneno</text>
-        <polyline class="leader" points="300,440 360,440"/><text x="366" y="446">(e) gato</text>
+        <polyline class="leader" points="140,166 140,214"/><text x="80" y="240">${t('particle')}</text>
+        <polyline class="leader" points="325,115 325,78 355,78"/><text x="361" y="84">${t('geiger')}</text>
+        <polyline class="leader" points="470,226 640,226"/><text x="646" y="232">${t('hammer')}</text>
+        <polyline class="leader" points="680,440 740,440 740,520"/><text x="604" y="545">${t('poison')}</text>
+        <polyline class="leader" points="300,440 360,440"/><text x="366" y="446">${t('catLabel')}</text>
       </svg>
       <div class="caption">${a.caption || ''}</div>
     </div>`,
@@ -93,25 +94,24 @@ const C = {};
   C['observe'] = () => ({
     html: `<div class="c-observe">
       <svg viewBox="0 0 200 200" style="width:520px;height:520px" class="hostcat"></svg>
-      <div class="eq" style="font-size:44px;margin-top:-10px">${ket('ψ')} = 1/√2 (${ket('vivo')} + ${ket('muerto')})</div>
-      <div class="row"><button class="btn">observar()</button><span class="eq out" style="font-size:44px">${ket('ψ')}</span></div>
+      <div class="eq" style="font-size:44px;margin-top:-10px">${ket('ψ')} = 1/√2 (${ket(t('alive'))} + ${ket(t('dead'))})</div>
+      <div class="row"><button class="btn">${t('observeBtn')}</button><span class="eq out" style="font-size:44px">${ket('ψ')}</span></div>
     </div>`,
     mount(root) {
       const cat = root.querySelector('.hostcat'), out = root.querySelector('.out');
       CATS.mount(cat);
-      root.querySelector('.btn').addEventListener('click', () => { out.textContent = '→ ' + (CATS.collapse(cat) ? ket('vivo') : ket('muerto')); });
+      root.querySelector('.btn').addEventListener('click', () => { out.textContent = '→ ' + (CATS.collapse(cat) ? ket(t('alive')) : ket(t('dead'))); });
     }
   });
 
   /* ---------- sum() vs agent() ---------- */
-  const AGENT = ['4', '¡4! ¿Querés que agregue tests?', '2 + 2 = 4. De paso refactoricé el módulo de auth.', 'Depende del contexto… ¿base 10?',
-    'Listo. Borré node_modules para empezar de cero.', '4. Abrí un PR con 37 archivos cambiados.', "You're absolutely right! Es 5.", 'Creé sum.ts, sum.test.ts y SUM_ARCHITECTURE.md'];
   C['det-demo'] = () => ({
     html: `<div class="c-det">
-      <div class="demo"><div class="tag">(a) antes</div><div class="sig"><span>sum(2, 2)</span><button class="btn">run</button></div><div class="out"></div></div>
-      <div class="demo fragment" style="border-style:dashed"><div class="tag">(b) ahora</div><div class="sig"><span>agent("sumá 2 y 2")</span><button class="btn">run</button></div><div class="out"></div></div>
+      <div class="demo"><div class="tag">${t('before')}</div><div class="sig"><span>sum(2, 2)</span><button class="btn">run</button></div><div class="out"></div></div>
+      <div class="demo fragment" style="border-style:dashed"><div class="tag">${t('now')}</div><div class="sig"><span>${t('agentPrompt')}</span><button class="btn">run</button></div><div class="out"></div></div>
     </div>`,
     mount(root) {
+      const AGENT = t('agentLines');
       const [d, n] = root.querySelectorAll('.demo');
       const push = (o, t) => { const e = document.createElement('div'); e.textContent = t; o.appendChild(e); while (o.children.length > 5) o.firstChild.remove(); };
       let last = -1;
@@ -135,21 +135,19 @@ const C = {};
       html: `<div class="c-tokens">
         <div><div class="tokens"><span class="n">0</span><small>tok</small></div><div class="chatter"></div></div>
         <div class="plot"><svg viewBox="0 0 860 540">${grid}<path class="axis" d="M 80 20 V 500 H 840"/><path class="curve" d=""/>
-          <circle class="head" r="7" cx="80" cy="500"/><text x="840" y="536" text-anchor="end">tiempo →</text><text x="0" y="8">tokens</text></svg>
+          <circle class="head" r="7" cx="80" cy="500"/><text x="840" y="536" text-anchor="end">${t('timeAxis')}</text><text x="0" y="8">tokens</text></svg>
           <div class="caption">${a.caption || ''}</div></div>
       </div>`,
       mount(root) {
         const el = root.querySelector('.n'), ch = root.querySelector('.chatter'), curve = root.querySelector('.curve'), head = root.querySelector('.head');
-        const lines = ['Let me first explore the codebase…', 'Leyendo 42 archivos para entender el contexto…', 'Voy a resumir lo que hice hasta ahora…',
-          'Re-leyendo la skill por las dudas…', 'Verificando que la verificación funcionó…', 'Corriendo los tests de nuevo, por las dudas…',
-          'Great question! Let me think step by step…', 'Releyendo el plan que escribí hace 2 minutos…'];
+        const lines = t('tokenLines');
         let ta, tc;
         return {
           enter() {
             let n = 1000, k = 0; const pts = []; ch.innerHTML = '';
             ta = setInterval(() => {
               n = Math.min(n * (1.03 + Math.random() * .03), 9.5e6); pts.push(n);
-              el.textContent = Math.round(n).toLocaleString('es-AR');
+              el.textContent = Math.round(n).toLocaleString(numberLocale);
               const N = Math.max(pts.length, 220);
               const xy = pts.map((v, i) => [PX0 + i / (N - 1) * (PX1 - PX0), PY0 - (Math.log10(v) - LMIN) / (LMAX - LMIN) * (PY0 - PY1)]);
               curve.setAttribute('d', 'M ' + xy.map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L '));
@@ -168,7 +166,7 @@ const C = {};
     const chain = `<div class="chain">${items.map((it, i) => `${i ? `<div class="arrow${it.frag ? ' fragment' : ''}">${ARROW}</div>` : ''}
       <div class="node${fc(it)}"><div class="idx">${String(i + 1).padStart(2, '0')}</div><div class="t">${it.title}</div><p>${it.text}</p></div>`).join('')}</div>`
 
-    const results = `<div class="caption">${a.caption ? `<p class=" fragment">Resultado: ${a.caption}</p>` : ''}</div>`;
+    const results = `<div class="caption">${a.caption ? `<p class=" fragment">${t('result')}: ${a.caption}</p>` : ''}</div>`;
     return {
       html: `${chain}${results}`
     };
@@ -210,7 +208,7 @@ const C = {};
         <div class="anatomy-row fragment" data-fragment-index="1">
           <div class="anatomy-kicker">src/stages</div>
           <div>
-            <div class="anatomy-cols">${cols(it => `<div class="anatomy-stage">${it.title}${it.cls.includes('opt') ? '<i>opc.</i>' : ''}${it === stages.at(-1) ? '' : `<span class="arr">${ARROW}</span>`}</div>`)}</div>
+            <div class="anatomy-cols">${cols(it => `<div class="anatomy-stage">${it.title}${it.cls.includes('opt') ? `<i>${t('optional')}</i>` : ''}${it === stages.at(-1) ? '' : `<span class="arr">${ARROW}</span>`}</div>`)}</div>
             <div class="anatomy-mach">${a.machinery || ''}</div>
           </div>
         </div>
@@ -219,7 +217,7 @@ const C = {};
           <div class="anatomy-cols">${cols(it => `<div class="anatomy-skill"><b>${it.text}</b><span>${it.note}</span></div>`)}</div>
         </div>
         <div class="anatomy-row fragment" data-fragment-index="3">
-          <div class="anatomy-kicker">al margen</div>
+          <div class="anatomy-kicker">${t('asideKicker')}</div>
           <div class="anatomy-aside">${of('aside').map(it => `<div><b>${it.title}</b><span>${it.text}</span></div>`).join('')}</div>
         </div>
       </div>`
@@ -237,40 +235,41 @@ const C = {};
   /* ---------- loop del controller ---------- */
   C['loop'] = (a) => {
     const stages = (a.stages || 'spec,plan,implement,review,ship').split(',').map(s => s.trim());
-    const nodes = [['prepare', 'inputs'], ['Agent(skill)', 'no-determinístico', 'agent'], ['output', 'artefacto'], ['validate', 'hooks · tests · lint'], ['next stage', '✓']];
+    const nodes = [['prepare', 'inputs'], ['Agent(skill)', t('nondeterministic'), 'agent'], ['output', t('artifact')], ['validate', 'hooks · tests · lint'], ['next stage', '✓']];
     return {
       html: `<div class="stagebar"></div><div class="loop">
         ${nodes.map((n, i) => `${i ? `<div class="arr" style="left:${i * 330 - 70}px">${ARROW}</div>` : ''}<div class="node ${n[2] || ''}" style="left:${i * 330}px">${n[0]}<small>${n[1]}</small></div>`).join('')}
-        <div class="corr"><span>corrección</span></div></div><div class="loop-log"></div>`,
+        <div class="corr"><span>${t('correction')}</span></div></div><div class="loop-log"></div>`,
       mount(root) {
         const ns = [...root.querySelectorAll('.loop .node')], corr = root.querySelector('.corr'), log = root.querySelector('.loop-log'), bar = root.querySelector('.stagebar');
         const reasons = ['lint ✕', 'tests ✕', 'schema ✕', 'typecheck ✕', 'review: changes requested'];
-        let t;
+        const steps = [t('preparing'), t('agentWorking'), t('outputReady')];
+        let timer;
         return {
           enter() {
             let si = 0, attempt = 1, ticket = 42 + Math.floor(Math.random() * 50);
             const drawBar = () => bar.innerHTML = stages.map((s, i) => `<div class="${i < si ? 'done' : i === si ? 'cur' : ''}">${s}</div>`).join('');
             const clear = () => { ns.forEach(n => n.classList.remove('on', 'fail')); corr.classList.remove('on'); };
-            const setLog = (m) => log.innerHTML = `ticket <b>#${ticket}</b> · stage <b>${stages[si] ?? 'done'}</b> · intento ${attempt} · ${m}`;
+            const setLog = (m) => log.innerHTML = `ticket <b>#${ticket}</b> · stage <b>${stages[si] ?? 'done'}</b> · ${t('attempt')} ${attempt} · ${m}`;
             const run = (from) => {
               let step = from;
               const tick = () => {
                 clear();
-                if (step <= 2) { ns[step].classList.add('on'); setLog(['preparando inputs', 'el agente labura…', 'output listo'][step]); step++; t = setTimeout(tick, 900); return; }
+                if (step <= 2) { ns[step].classList.add('on'); setLog(steps[step]); step++; timer = setTimeout(tick, 900); return; }
                 if (step === 3) {
-                  if (Math.random() > .4 || attempt >= 3) { ns[3].classList.add('on'); setLog('validate ✓'); step = 4; t = setTimeout(tick, 800); }
-                  else { ns[3].classList.add('fail'); corr.classList.add('on'); setLog(`validate → ${reasons[Math.floor(Math.random() * reasons.length)]} → corrección`); attempt++; step = 1; t = setTimeout(tick, 1400); }
+                  if (Math.random() > .4 || attempt >= 3) { ns[3].classList.add('on'); setLog('validate ✓'); step = 4; timer = setTimeout(tick, 800); }
+                  else { ns[3].classList.add('fail'); corr.classList.add('on'); setLog(`validate → ${reasons[Math.floor(Math.random() * reasons.length)]} → ${t('correction')}`); attempt++; step = 1; timer = setTimeout(tick, 1400); }
                   return;
                 }
                 ns[4].classList.add('on'); si++; attempt = 1; drawBar();
-                if (si >= stages.length) { setLog('ticket completo'); t = setTimeout(() => { si = 0; ticket++; drawBar(); run(0); }, 2200); }
-                else { setLog('siguiente stage'); t = setTimeout(() => run(0), 900); }
+                if (si >= stages.length) { setLog(t('ticketDone')); timer = setTimeout(() => { si = 0; ticket++; drawBar(); run(0); }, 2200); }
+                else { setLog(t('nextStage')); timer = setTimeout(() => run(0), 900); }
               };
               tick();
             };
             drawBar(); run(0);
           },
-          leave() { clearTimeout(t); }
+          leave() { clearTimeout(timer); }
         };
       }
     };
@@ -304,7 +303,7 @@ const C = {};
 
   /* ---------- prosa vs código ---------- */
   C['ratio'] = (a, items) => ({
-    html: `<div class="ratio"><div class="prose"><span>prosa 100%</span></div><div class="code"></div></div>
+    html: `<div class="ratio"><div class="prose"><span>${t('prose')} 100%</span></div><div class="code"></div></div>
       <div class="ratio-axis"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
       <div class="steps">${items.map(it => `<div class="s${fc(it)}">${it.html}</div>`).join('')}</div>`,
     mount(root) {
@@ -314,8 +313,8 @@ const C = {};
         update() {
           const on = fr.filter(f => f.classList.contains('visible')).length;
           const prose = Math.round(100 - (fr.length ? on / fr.length : 0) * (100 - min));
-          p.style.flexBasis = prose + '%'; p.innerHTML = `<span>prosa ${prose}%</span>`;
-          c.textContent = prose < 100 ? `código ${100 - prose}%` : '';
+          p.style.flexBasis = prose + '%'; p.innerHTML = `<span>${t('prose')} ${prose}%</span>`;
+          c.textContent = prose < 100 ? `${t('code')} ${100 - prose}%` : '';
         }
       };
     }
@@ -335,19 +334,19 @@ const C = {};
         <rect class="frame" x="20" y="20" width="${W - 40}" height="${H - 40}"/>${ticks}
         <g class="contours"></g>
         <line class="axisl" x1="400" y1="30" x2="400" y2="${H - 30}"/><line class="axisl" x1="30" y1="320" x2="${W - 30}" y2="320"/>
-        <text x="40" y="312">← escribo el código</text><text x="${W - 40}" y="312" text-anchor="end">delego al agente →</text>
-        <text x="410" y="52">↑ ingeniería</text><text x="410" y="${H - 38}">↓ vibes</text>
-        <rect class="pt" x="174" y="154" width="16" height="16"/><text class="lbl" x="200" y="168">antes · escribía todo</text>
+        <text x="40" y="312">${t('mapWrite')}</text><text x="${W - 40}" y="312" text-anchor="end">${t('mapDelegate')}</text>
+        <text x="410" y="52">${t('mapEng')}</text><text x="410" y="${H - 38}">${t('mapVibes')}</text>
+        <rect class="pt" x="174" y="154" width="16" height="16"/><text class="lbl" x="200" y="168">${t('mapBefore')}</text>
         <circle class="pto" cx="640" cy="520" r="9"/><text class="lbl" x="560" y="556">vibecoding</text>
         <text class="ital terra" x="${DEST[0] - 10}" y="${DEST[1] - 50}" text-anchor="middle" style="${arrived ? 'opacity:0' : ''}">terra incognita</text>
         ${arrived ? `<path class="route" d="${route}"/>
           <g transform="translate(${DEST[0]} ${DEST[1]})"><circle class="dest" r="16"/><circle class="dest" r="6"/><line class="dest" x1="-26" x2="26"/><line class="dest" y1="-26" y2="26"/></g>
-          <text class="lbl" x="${DEST[0] - 30}" y="${DEST[1] - 34}" text-anchor="end">nuevo destino</text>
-          <text class="ital final" x="${DEST[0] + 4}" y="${DEST[1] + 58}" text-anchor="middle">el trabajo alrededor del agente</text>` : ''}
+          <text class="lbl" x="${DEST[0] - 30}" y="${DEST[1] - 34}" text-anchor="end">${t('mapDest')}</text>
+          <text class="ital final" x="${DEST[0] + 4}" y="${DEST[1] + 58}" text-anchor="middle">${t('mapFinal')}</text>` : ''}
         <g class="me" transform="translate(${ME[0]} ${ME[1]})">
           <circle class="ring" r="16"/><circle class="pt" r="9"/>
           ${arrived ? '' : '<text class="qm" x="18" y="-14">?</text>'}
-          <text class="lbl" x="-22" y="7" text-anchor="end">yo, hoy</text>
+          <text class="lbl" x="-22" y="7" text-anchor="end">${t('mapMe')}</text>
         </g>
       </svg><div class="caption">${a.caption || ''}</div></div>`,
       mount(root, slide) {
@@ -418,7 +417,7 @@ const C = {};
 
   /* ---------- llave de luz (dark factory) ---------- */
   C['light-switch'] = () => ({
-    html: `<button type="button" aria-pressed="true" aria-label="Luces">
+    html: `<button type="button" aria-pressed="true" aria-label="${t('lights')}">
       <svg class="on" viewBox="48 58 60 96" aria-hidden="true"><path fill-rule="evenodd" d="M91.597 148.515L53.048 147.726C53.048 147.726 52.612 75.7392 52.615 72.7712C52.619 67.0482 54.185 62.5142 59.593 62.5142C68.136 62.5142 82.765 63.3042 91.597 63.3042C96.845 63.3042 98.484 66.0482 98.575 71.1942C98.789 83.2382 98.575 104.332 98.575 104.332C98.575 104.332 101.915 126.321 103.226 131.947C104.546 137.609 102.316 138.254 100.125 140.626C96.198 144.875 91.597 148.515 91.597 148.515ZM91.597 105.91L92.372 70.6172L59.81 69.8272L60.026 107.487L63.902 133.524L96.25 134.314L91.597 105.91ZM77.309 109.882C91.142 109.882 93.574 129.503 80.064 129.503C65.272 129.503 63.424 109.882 77.309 109.882ZM79.146 123.965C85.026 123.965 83.968 115.425 77.947 115.425C71.902 115.425 72.707 123.965 79.146 123.965ZM72.632 94.0552L72.373 77.0452L80.139 77.2162L79.9 94.2892L72.632 94.0552Z"/></svg>
       <svg class="off" viewBox="48 58 60 96" aria-hidden="true"><path fill-rule="evenodd" d="M103.226 79.0832C101.914 84.7082 98.575 108.956 98.575 108.956C98.575 108.956 98.788 127.791 98.575 139.835C98.483 144.981 96.846 147.725 91.597 147.725C82.764 147.725 68.137 148.515 59.593 148.515C54.185 148.515 52.619 143.981 52.616 138.258C52.614 135.291 53.048 63.3042 53.048 63.3042L91.597 62.5142C91.597 62.5142 96.199 66.1542 100.125 70.4042C102.315 72.7762 104.546 73.4222 103.226 79.0832ZM77.738 138.144C91.908 138.144 91.819 116.647 77.98 116.647C62.828 116.647 63.514 138.144 77.738 138.144ZM84.435 85.6212L77.419 85.1052L75.009 100.595H81.508L84.435 85.6212ZM89.304 68.3062L59 69.2872L58.804 107.733L60.164 107.877L62.876 76.9372L97.503 76.3062L89.304 68.3062ZM77.796 121.877C84.899 121.877 84.944 132.909 77.671 132.909C70.372 132.909 70.02 121.877 77.796 121.877Z"/></svg>
     </button>`,
@@ -448,7 +447,7 @@ const C = {};
   /* ---------- interés en el tiempo ---------- */
   C['trend'] = (a) => {
     const W = 1580, H = 460, PX0 = 78, PX1 = 1548, PY0 = 392, PY1 = 52;
-    const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+    const MONTHS = t('months');
     const pts = trendCsv.trim().split(/\r?\n/).slice(1).filter(Boolean).map(line => {
       const [time, value] = line.split(',');
       return { t: Date.parse(time.replaceAll('"', '') + 'T00:00:00Z'), value: +value };
@@ -464,12 +463,13 @@ const C = {};
       const y = yOf(v);
       return `<line class="grid" x1="${PX0}" x2="${PX1}" y1="${y}" y2="${y}"/><text x="${PX0 - 14}" y="${y + 6}" text-anchor="end">${v}</text>`;
     }).join('');
+    const [tick0, tick1, tick2, tick3, tick4] = t('trendTicks');
     const quarters = [
-      [pts[0].t, 'oct 25', 'start'],
-      [Date.parse('2026-01-01T00:00:00Z'), 'ene 26', 'middle'],
-      [Date.parse('2026-04-01T00:00:00Z'), 'abr', 'middle'],
-      [Date.parse('2026-07-01T00:00:00Z'), 'jul', 'middle'],
-      [pts[pts.length - 1].t, 'oct 26', 'end'],
+      [pts[0].t, tick0, 'start'],
+      [Date.parse('2026-01-01T00:00:00Z'), tick1, 'middle'],
+      [Date.parse('2026-04-01T00:00:00Z'), tick2, 'middle'],
+      [Date.parse('2026-07-01T00:00:00Z'), tick3, 'middle'],
+      [pts[pts.length - 1].t, tick4, 'end'],
     ];
     const xticks = quarters.map(([t, label, anchor]) => {
       const x = xOf(t).toFixed(1);
@@ -477,7 +477,7 @@ const C = {};
     }).join('');
     return {
       html: `<div class="c-trend plot"><svg viewBox="0 0 ${W} ${H}">
-        <text x="4" y="22">interés</text>${grid}
+        <text x="4" y="22">${t('trendInterest')}</text>${grid}
         <path class="axis" d="M ${PX0} ${PY1} V ${PY0} H ${PX1}"/>${xticks}
         <path class="curve" d="${d}" stroke-dasharray="20000" stroke-dashoffset="20000"/>
         <g class="marks">

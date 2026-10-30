@@ -9,6 +9,10 @@ npm run dev
 
 Al guardar un `.md`, Vite recarga la página. El hash de reveal.js vuelve al mismo slide.
 
+## Idioma
+
+El deck abre en español. `ES` / `EN`, arriba al centro, cambia de idioma y recuerda la elección. Para compartir la versión en inglés: `http://localhost:4321/?lang=en`. Los textos en inglés viven en `slides/en/`.
+
 ## Teclas
 
 `→` / `espacio` avanzar · `←` volver · `S` vista de presentador · `F` fullscreen · `Esc` overview · `C` cambiar el estilo del gato
