@@ -5,11 +5,20 @@ import 'reveal.js/reveal.css';
 import './styles.css';
 import { CATS } from './cats.js';
 import { mountComponent } from './components.js';
+import { applyLang, htmlLang, lang, t } from './i18n.js';
 import intro from './slides/00-intro.md?raw';
 import acto1 from './slides/01-acto-1.md?raw';
 import acto2 from './slides/02-acto-2.md?raw';
 import acto3 from './slides/03-acto-3.md?raw';
 import cierre from './slides/04-cierre.md?raw';
+import introEn from './slides/en/00-intro.md?raw';
+import acto1En from './slides/en/01-acto-1.md?raw';
+import acto2En from './slides/en/02-acto-2.md?raw';
+import acto3En from './slides/en/03-acto-3.md?raw';
+import cierreEn from './slides/en/04-cierre.md?raw';
+
+document.documentElement.lang = htmlLang;
+document.title = t('deckTitle');
 
 const NS = 'http://www.w3.org/2000/svg';
 const DECO = {
@@ -26,7 +35,11 @@ const DECO = {
   'axis': (() => { let s = `<line x1="1500" y1="140" x2="1500" y2="420"/><line x1="1500" y1="420" x2="1820" y2="420"/>`; for (let i = 1; i <= 6; i++) s += `<line x1="${1500 + i * 50}" y1="420" x2="${1500 + i * 50}" y2="410"/><line x1="1500" y1="${420 - i * 44}" x2="1510" y2="${420 - i * 44}"/>`; let d = 'M 1500 400'; for (let x = 0; x <= 300; x += 10) d += ` L ${1500 + x} ${400 - Math.pow(x / 300, 2.4) * 250}`; return s + `<path d="${d}" class="dash"/>`; })(),
 };
 
-[intro, acto1, acto2, acto3, cierre].forEach((src, i) => {
+const decks = {
+  es: [intro, acto1, acto2, acto3, cierre],
+  en: [introEn, acto1En, acto2En, acto3En, cierreEn],
+};
+decks[lang].forEach((src, i) => {
   document.getElementById('md-' + i).textContent = src;
 });
 
@@ -83,7 +96,7 @@ function injectChrome(deck) {
     c.className = 'chrome';
     c.innerHTML = `<div class="reg r1"></div><div class="reg r2"></div><div class="reg r3"></div><div class="reg r4"></div>
       <div class="tl">${tl}</div><div class="tr">AI4DEVS · OCT 2026</div>
-      <div class="bl">La fábrica de Schrödinger</div><div class="br">${String(i + 1).padStart(2, '0')} / ${total}</div>`;
+      <div class="bl">${t('deckTitle')}</div><div class="br">${String(i + 1).padStart(2, '0')} / ${total}</div>`;
     s.appendChild(c);
   });
 }
@@ -115,10 +128,21 @@ await deck.initialize();
 mountAll();
 injectChrome(deck);
 activate(deck.getCurrentSlide());
+document.documentElement.classList.add('is-ready');
 
 deck.on('slidechanged', e => activate(e.currentSlide));
 deck.on('fragmentshown', e => sync(e.fragment.closest('section')));
 deck.on('fragmenthidden', e => sync(e.fragment.closest('section')));
-deck.addKeyBinding({ keyCode: 67, key: 'C', description: 'Cambiar el estilo del gato' }, () => {
-  toast('gato: ' + CATS.cycle());
+deck.addKeyBinding({ keyCode: 67, key: 'C', description: t('catKey') }, () => {
+  toast(t('catToast') + ': ' + CATS.cycle());
+});
+
+const langSwitch = document.getElementById('lang');
+langSwitch.setAttribute('aria-label', t('langLabel'));
+langSwitch.querySelectorAll('button').forEach(btn => {
+  const on = btn.dataset.lang === lang;
+  btn.setAttribute('aria-pressed', String(on));
+  btn.addEventListener('click', () => {
+    if (btn.dataset.lang !== lang) applyLang(btn.dataset.lang);
+  });
 });
