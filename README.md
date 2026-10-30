@@ -69,6 +69,7 @@ Van como HTML, no como `::nombre`. Los que llevan lista leen los `<li>`.
 | `data-comp="files"` + la misma lista | evolución del estado |
 | `data-comp="shot" data-src="…" data-stamp="…" data-caption="…"` | screenshot |
 | `data-comp="stages"` + `<li><b>stage</b><span>skill</span>` | chips de stages |
+| `data-comp="anatomy"` + listas `data-layer="stack\|stages\|aside"` | lámina: stack, stages en trazo continuo, skills en punteado (`opc.` en el ítem, `data-machinery` debajo) |
 | `data-comp="supervisor" data-name="…" data-sub="…"` | la caja que se achica con los pasos |
 | `data-comp="loop" data-stages="spec, plan, …"` | loop animado del controller |
 | `data-comp="api" data-hub="API" data-sub="…"` + 2 ítems `data-title` | controller ↔ API ↔ dashboard |

@@ -12,6 +12,7 @@ function readItems(el) {
   return [...el.querySelectorAll(':scope > ul > li')].map(li => {
     const b = li.querySelector(':scope > b');
     const span = li.querySelector(':scope > span');
+    const small = li.querySelector(':scope > small');
     return {
       frag: li.classList.contains('fragment'),
       cls: [...li.classList].filter(c => c !== 'fragment'),
@@ -20,6 +21,8 @@ function readItems(el) {
       url: li.dataset.url || '',
       thumb: li.dataset.thumb || '',
       pos: li.dataset.pos || '',
+      layer: li.parentElement?.dataset.layer || '',
+      note: small ? small.innerHTML : '',
       text: span ? span.innerHTML : (b ? '' : li.innerHTML.trim()),
       html: b ? (span ? span.innerHTML : '') : li.innerHTML.trim(),
     };
@@ -192,6 +195,36 @@ const C = {};
   C['shot'] = (a) => ({
     html: `<div class="c-shot"><img class="shot" src="${a.src}" alt="${a.alt || ''}">${a.stamp ? `<div class="stamp">${a.stamp}</div>` : ''}<div class="caption">${a.caption || ''}</div></div>`
   });
+
+  /* ---------- lámina de factory-skills ---------- */
+  C['anatomy'] = (a, items) => {
+    const of = (layer) => items.filter(it => it.layer === layer);
+    const stages = of('stages');
+    const cols = (row) => stages.map(it => row(it)).join('');
+    return {
+      html: `<div class="anatomy">
+        <div class="anatomy-row fragment" data-fragment-index="0">
+          <div class="anatomy-kicker">stack</div>
+          <div class="anatomy-stack">${of('stack').map(it => `<span>${it.text || it.title}</span>`).join('')}</div>
+        </div>
+        <div class="anatomy-row fragment" data-fragment-index="1">
+          <div class="anatomy-kicker">src/stages</div>
+          <div>
+            <div class="anatomy-cols">${cols(it => `<div class="anatomy-stage">${it.title}${it.cls.includes('opt') ? '<i>opc.</i>' : ''}${it === stages.at(-1) ? '' : `<span class="arr">${ARROW}</span>`}</div>`)}</div>
+            <div class="anatomy-mach">${a.machinery || ''}</div>
+          </div>
+        </div>
+        <div class="anatomy-row fragment" data-fragment-index="2">
+          <div class="anatomy-kicker">skills/</div>
+          <div class="anatomy-cols">${cols(it => `<div class="anatomy-skill"><b>${it.text}</b><span>${it.note}</span></div>`)}</div>
+        </div>
+        <div class="anatomy-row fragment" data-fragment-index="3">
+          <div class="anatomy-kicker">al margen</div>
+          <div class="anatomy-aside">${of('aside').map(it => `<div><b>${it.title}</b><span>${it.text}</span></div>`).join('')}</div>
+        </div>
+      </div>`
+    };
+  };
 
   /* ---------- stages + supervisor ---------- */
   C['stages'] = (a, items) => ({

@@ -23,6 +23,43 @@ Las tarjetas son links (se pueden clickear en vivo). Revisar las descripciones d
 
 ---
 
+<!-- .slide: data-title="factory-skills" data-sec="§ Cierre" data-deco="grid" -->
+
+<p class="label">geut/factory-skills</p>
+
+## La caja, *por dentro*
+
+<div data-comp="anatomy" data-machinery="definition · flow · prompt · output">
+<ul data-layer="stack">
+<li>TypeScript</li>
+<li>Node 24</li>
+<li>Pi</li>
+<li>SQLite</li>
+<li>Zod</li>
+<li>Herdr</li>
+</ul>
+<ul data-layer="stages">
+<li><b>plan</b><span>factory-plan</span><small>plan y tareas</small></li>
+<li><b>work</b><span>factory-work</span><small>do the task</small></li>
+<li class="opt"><b>qa</b><span>factory-qa</span><small>criterios, desde afuera</small></li>
+<li><b>review</b><span>factory-review</span><small>otro modelo, solo lectura</small></li>
+<li><b>wrapup</b><span>factory-wrapup</span><small>handoff</small></li>
+</ul>
+<ul data-layer="aside">
+<li><b>prove-it-works</b><span>la usa work</span></li>
+<li><b>factory-reflect</b><span>después, con evidencia</span></li>
+<li><b>create-factory-verification</b><span>verificaciones a medida</span></li>
+</ul>
+</div>
+
+<p class="caption"><b>Fig. 6</b> — Trazo continuo: código (<code>src/stages</code>). Trazo punteado: prosa (<code>skills/</code>). El controller mueve el ticket; la skill solo describe al especialista.</p>
+
+Note:
+
+El stack es TypeScript sobre Node 24, con Pi como cliente, SQLite para el estado, Zod en el API y Herdr para los panes. Cada columna de arriba es un stage en src/stages: código que prepara la entrada y valida la salida. La caja punteada es la skill, prosa, el comportamiento del especialista. QA no corre salvo que FACTORY.json prenda stages.qa. Abajo, tres skills que no son stages: prove-it-works la usa el worker, factory-reflect mira tickets terminados, y create-factory-verification arma una skill de verificación local al repo.
+
+---
+
 <!-- .slide: data-title="Takeaways I" data-sec="§ Cierre" data-deco="rings" -->
 
 <p class="label">conclusiones · 1/2</p>

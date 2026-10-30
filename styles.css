@@ -289,6 +289,28 @@ blockquote strong { font-weight: 500; }
 .reveal .slides section[data-step="2"] .supervisor { transform: scale(.4); }
 .reveal .slides section[data-step="3"] .supervisor { transform: scale(.05); opacity: 0; }
 
+/* ---------- anatomy plate ---------- */
+.reveal .slides section:has(.comp-anatomy) h2 { font-size: 88px; margin-bottom: 28px; }
+.reveal .slides section:has(.comp-anatomy) .label { margin-bottom: 22px; }
+.anatomy { display: flex; flex-direction: column; gap: 26px; }
+.anatomy-row { display: grid; grid-template-columns: 168px 1fr; gap: 28px; align-items: center; }
+.anatomy-kicker { font-family: var(--mono); font-size: 18px; letter-spacing: .12em; text-transform: uppercase; color: var(--mid); }
+.anatomy-stack { display: flex; }
+.anatomy-stack span { flex: 1; border: 1.5px solid var(--ink); margin-right: -1.5px; padding: 16px 8px; text-align: center; font-family: var(--mono); font-size: 24px; background: var(--bg); }
+.anatomy-cols { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0 52px; }
+.anatomy-stage { position: relative; border: 1.5px solid var(--ink); background: var(--bg); padding: 22px 10px; text-align: center; font-family: var(--mono); font-size: 30px; font-weight: 500; }
+.anatomy-stage i { position: absolute; top: 8px; right: 10px; font-style: normal; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--mid); font-weight: 400; }
+.anatomy-stage .arr { position: absolute; left: 100%; top: 50%; width: 52px; height: 20px; transform: translateY(-50%); display: flex; align-items: center; justify-content: center; }
+.anatomy-stage .arr svg { width: 36px; height: 14px; }
+.anatomy-mach { margin-top: 12px; font-family: var(--mono); font-size: 18px; letter-spacing: .08em; color: var(--mid); }
+.anatomy-skill { border: 1.5px dashed var(--ink); background: var(--bg); padding: 16px 14px 18px; min-height: 112px; }
+.anatomy-skill b { display: block; font-family: var(--mono); font-weight: 500; font-size: 22px; margin-bottom: 8px; }
+.anatomy-skill span { display: block; font-family: var(--serif); font-size: 26px; line-height: 1.25; color: var(--mid); }
+.anatomy-aside { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 36px; }
+.anatomy-aside > div { border-top: 1px solid var(--hair); padding-top: 12px; }
+.anatomy-aside b { display: block; font-family: var(--mono); font-weight: 500; font-size: 20px; margin-bottom: 6px; }
+.anatomy-aside span { display: block; font-size: 26px; line-height: 1.25; color: var(--mid); }
+
 /* ---------- controller loop ---------- */
 .loop { position: relative; width: 1580px; height: 400px; margin-top: 10px; }
 .loop .node { position: absolute; top: 30px; width: 260px; height: 150px; border: 1.5px solid var(--ink); background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--mono); font-size: 29px; transition: background .2s, color .2s; }
