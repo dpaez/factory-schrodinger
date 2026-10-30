@@ -34,9 +34,9 @@ Las tarjetas son links (se pueden clickear en vivo). Revisar las descripciones d
 <li>TypeScript</li>
 <li>Node 24</li>
 <li>Pi</li>
+<li>Herdr</li>
 <li>SQLite</li>
 <li>Zod</li>
-<li>Herdr</li>
 </ul>
 <ul data-layer="stages">
 <li><b>plan</b><span>factory-plan</span><small>plan y tareas</small></li>
